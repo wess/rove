@@ -1,6 +1,6 @@
 {
   "name": "rove",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PostgreSQL migrations tool built with Bun and TypeScript",
   "module": "src/main.ts",
   "type": "module",
@@ -12,13 +12,13 @@
     "access": "public"
   },
   "scripts": {
-    "compile:linux-x64":    "bun build --compile --target=bun-linux-x64    --outfile=build/linux-x64/rove     src/main.ts",
-    "compile:darwin-x64":   "bun build --compile --target=bun-darwin-x64   --outfile=build/darwin-x64/rove    src/main.ts",
+    "compile:linux-x64": "bun build --compile --target=bun-linux-x64    --outfile=build/linux-x64/rove     src/main.ts",
+    "compile:darwin-x64": "bun build --compile --target=bun-darwin-x64   --outfile=build/darwin-x64/rove    src/main.ts",
     "compile:darwin-arm64": "bun build --compile --target=bun-darwin-arm64 --outfile=build/darwin-arm64/rove  src/main.ts",
-    "compile:windows-x64":  "bun build --compile --target=bun-windows-x64 --outfile=build/windows-x64/rove.exe src/main.ts",
+    "compile:windows-x64": "bun build --compile --target=bun-windows-x64 --outfile=build/windows-x64/rove.exe src/main.ts",
     "compile": "bun run compile:linux-x64 && bun run compile:darwin-x64 && bun run compile:darwin-arm64 && bun run compile:windows-x64",
-    "dev":     "bun dev src/main.ts",
-    "test":    "bun test",
+    "dev": "bun dev src/main.ts",
+    "test": "bun test",
     "release": "bun run compile && bun publish --access public"
   },
   "devDependencies": {
@@ -28,6 +28,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "commander": "^13.1.0"
+    "commander": "^13.1.0",
+    "pg": "^8.16.0"
   }
 }

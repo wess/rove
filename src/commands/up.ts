@@ -1,43 +1,79 @@
-import fs from "fs";
+import { Pool } from "pg";
+import { promises as fs } from "fs";
 import path from "path";
-import { sql } from "bun";
 
-export default async function up() {
-  // 1) Ensure the migrations table exists
-  await sql`
-    CREATE TABLE IF NOT EXISTS migrations (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL UNIQUE,
-      run_on TIMESTAMP NOT NULL DEFAULT NOW()
+export default async function up(): Promise<void> {
+  // 1) Grab DATABASE_URL (or POSTGRES_URL) from env
+  const envUrl = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
+  if (!envUrl) {
+    console.error("⚠️  Missing DATABASE_URL or POSTGRES_URL environment variable");
+    process.exit(1);
+  }
+
+  // 2) Spin up a throw-away pool for this migration run
+  const upPool = new Pool({ connectionString: envUrl });
+  const client = await upPool.connect();
+
+  try {
+    // 3) Start a transaction
+    await client.query("BEGIN");
+
+    // 4) Ensure the migrations table exists
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS migrations (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,
+        run_on TIMESTAMP NOT NULL DEFAULT NOW()
+      );
+    `);
+
+    // 5) Load already-applied migrations
+    const { rows: appliedRows } = await client.query<{ name: string }>(
+      `SELECT name FROM migrations`
     );
-  `;
+    const applied = new Set(appliedRows.map(r => r.name));
 
-  // 2) Load the set of already-applied migrations
-  const appliedRows = await sql`SELECT name FROM migrations`;
-  const applied = new Set<string>(appliedRows.map(r => r.name));
-
-  // 3) Discover all migration folders
-  const migrationsDir = path.resolve("migrations");
-  const allMigs = fs
-    .readdirSync(migrationsDir, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name)
-    .sort();
-
-  // 4) Apply each pending migration
-  for (const name of allMigs) {
-    if (applied.has(name)) continue;
-
-    const upPath = path.join(migrationsDir, name, "up.sql");
-    if (!fs.existsSync(upPath)) {
-      console.warn(`⚠ skipping "${name}": no up.sql found`);
-      continue;
+    // 6) Discover all migration folders
+    const migrationsDir = path.resolve(process.cwd(), "migrations");
+    let allMigs: string[];
+    try {
+      const entries = await fs.readdir(migrationsDir, { withFileTypes: true });
+      allMigs = entries
+        .filter(e => e.isDirectory())
+        .map(e => e.name)
+        .sort((a, b) => a.localeCompare(b));
+    } catch {
+      console.error(`⚠️  Migrations directory not found at ${migrationsDir}`);
+      process.exit(1);
     }
 
-    const script = fs.readFileSync(upPath, "utf-8").trim();
-    console.log(`→ Applying ${name}`);
-    await sql.unsafe(script);
-    await sql`INSERT INTO migrations (name) VALUES (${name})`;
-    console.log(`✔ ${name}`);
+    // 7) Apply each pending migration
+    for (const name of allMigs) {
+      if (applied.has(name)) continue;
+
+      const upPath = path.join(migrationsDir, name, "up.sql");
+      let script: string;
+      try {
+        script = (await fs.readFile(upPath, "utf-8")).trim();
+      } catch {
+        console.warn(`⚠️  Skipping "${name}": no up.sql found`);
+        continue;
+      }
+
+      console.log(`→ Applying "${name}"…`);
+      await client.query(script);
+      await client.query(`INSERT INTO migrations (name) VALUES ($1)`, [name]);
+      console.log(`✔ "${name}" applied.`);
+    }
+
+    // 8) Commit all changes
+    await client.query("COMMIT");
+  } catch (err: any) {
+    await client.query("ROLLBACK");
+    console.error("❌ Error applying migrations:", err.message || err);
+    process.exit(1);
+  } finally {
+    client.release();
+    await upPool.end();
   }
 }

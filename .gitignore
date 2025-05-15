@@ -2,6 +2,8 @@ Procfile
 build
 dist
 .turbo
+migrations
+.envrc
 
 # Logs
 
