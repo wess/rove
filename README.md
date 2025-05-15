@@ -1,8 +1,8 @@
-# Shift
+# Rove
 
 **A nice little migration too for Postgresql.*
 
-Shift provides a fast CLI for managing your Postgres schema:
+Rove provides a fast CLI for managing your Postgres schema:
 
 * Organize migrations in timestamped folders with `up.sql` / `down.sql`
 * Built on Bun’s native `sql` client—no external `pg` or `pg_dump` required
@@ -21,7 +21,7 @@ bun install -g .
 Or as a local dev dependency:
 
 ```bash
-bun add -D shift
+bun add -D rove
 ```
 
 ---
@@ -31,13 +31,13 @@ bun add -D shift
 1. **Initialize** your migrations directory:
 
    ```bash
-   shift init
+   rove init
    ```
 
 2. **Generate** a new migration:
 
    ```bash
-   shift new add_users_table
+   rove new add_users_table
    # creates migrations/<timestamp>_add_users_table/{up.sql,down.sql}
    ```
 
@@ -46,19 +46,19 @@ bun add -D shift
 4. **Run** pending migrations:
 
    ```bash
-   shift up
+   rove up
    ```
 
 5. **Rollback** the last migration:
 
    ```bash
-   shift down
+   rove down
    ```
 
 6. **Check** migration status:
 
    ```bash
-   shift status
+   rove status
    ```
 
 ---
@@ -67,18 +67,18 @@ bun add -D shift
 
 | Command             | Description                                                               |
 | ------------------- | ------------------------------------------------------------------------- |
-| `shift help`        | Show usage information                                                    |
-| `shift init`        | Create the top‑level `migrations/` folder                                 |
-| `shift new <name>`  | Scaffold a new migration directory with `up.sql` and `down.sql`           |
-| `shift create`      | Create the database specified by `DATABASE_URL`                           |
-| `shift drop`        | Drop the database specified by `DATABASE_URL`                             |
-| `shift up`          | Create DB if needed and run pending `up.sql` scripts                      |
-| `shift migrate`     | Alias for `shift up`                                                      |
-| `shift rollback`    | Revert the most recent `down.sql` script                                  |
-| `shift down`        | Alias for `shift rollback`                                                |
-| `shift status`      | Show applied vs pending migrations (supports `--exit-code` and `--quiet`) |
-| `shift dump [file]` | Dump the public schema to a SQL file (default: `schema.sql`)              |
-| `shift load [file]` | Load a SQL schema file into the database (default: `schema.sql`)          |
+| `rove help`        | Show usage information                                                    |
+| `rove init`        | Create the top‑level `migrations/` folder                                 |
+| `rove new <name>`  | Scaffold a new migration directory with `up.sql` and `down.sql`           |
+| `rove create`      | Create the database specified by `DATABASE_URL`                           |
+| `rove drop`        | Drop the database specified by `DATABASE_URL`                             |
+| `rove up`          | Create DB if needed and run pending `up.sql` scripts                      |
+| `rove migrate`     | Alias for `rove up`                                                      |
+| `rove rollback`    | Revert the most recent `down.sql` script                                  |
+| `rove down`        | Alias for `rove rollback`                                                |
+| `rove status`      | Show applied vs pending migrations (supports `--exit-code` and `--quiet`) |
+| `rove dump [file]` | Dump the public schema to a SQL file (default: `schema.sql`)              |
+| `rove load [file]` | Load a SQL schema file into the database (default: `schema.sql`)          |
 
 ---
 

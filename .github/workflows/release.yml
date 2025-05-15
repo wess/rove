@@ -10,6 +10,7 @@ on:
       - main
     paths:
       - 'VERSION'
+      - '.github/workflows/release.yml'
 
 jobs:
   build-and-release:
@@ -37,23 +38,23 @@ jobs:
 
       - name: Package Linux x64
         run: |
-          tar -czvf shift-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz \
-            -C build/linux-x64 shift
+          tar -czvf rove-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz \
+            -C build/linux-x64 rove
 
       - name: Package macOS x64
         run: |
-          tar -czvf shift-${{ steps.get_version.outputs.version }}-darwin-x64.tar.gz \
-            -C build/darwin-x64 shift
+          tar -czvf rove-${{ steps.get_version.outputs.version }}-darwin-x64.tar.gz \
+            -C build/darwin-x64 rove
 
       - name: Package macOS ARM64
         run: |
-          tar -czvf shift-${{ steps.get_version.outputs.version }}-darwin-arm64.tar.gz \
-            -C build/darwin-arm64 shift
+          tar -czvf rove-${{ steps.get_version.outputs.version }}-darwin-arm64.tar.gz \
+            -C build/darwin-arm64 rove
 
       - name: Package Windows x64
         run: |
-          zip -j shift-${{ steps.get_version.outputs.version }}-windows-x64.zip \
-            build/windows-x64/shift.exe
+          zip -j rove-${{ steps.get_version.outputs.version }}-windows-x64.zip \
+            build/windows-x64/rove.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -61,9 +62,9 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: v${{ steps.get_version.outputs.version }}
           files: |
-            shift-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz
-            shift-${{ steps.get_version.outputs.version }}-darwin-x64.tar.gz
-            shift-${{ steps.get_version.outputs.version }}-darwin-arm64.tar.gz
-            shift-${{ steps.get_version.outputs.version }}-windows-x64.zip
+            rove-${{ steps.get_version.outputs.version }}-linux-x64.tar.gz
+            rove-${{ steps.get_version.outputs.version }}-darwin-x64.tar.gz
+            rove-${{ steps.get_version.outputs.version }}-darwin-arm64.tar.gz
+            rove-${{ steps.get_version.outputs.version }}-windows-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

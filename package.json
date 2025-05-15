@@ -1,21 +1,21 @@
 {
-  "name": "shift",
+  "name": "rove",
   "version": "0.0.1",
   "description": "PostgreSQL migrations tool built with Bun and TypeScript",
   "module": "src/main.ts",
   "type": "module",
   "bin": {
-    "shift": "./src/main.ts"
+    "rove": "./src/main.ts"
   },
   "private": false,
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "compile:linux-x64":    "bun build --compile --target=bun-linux-x64    --outfile=build/linux-x64/shift     src/main.ts",
-    "compile:darwin-x64":   "bun build --compile --target=bun-darwin-x64   --outfile=build/darwin-x64/shift    src/main.ts",
-    "compile:darwin-arm64": "bun build --compile --target=bun-darwin-arm64 --outfile=build/darwin-arm64/shift  src/main.ts",
-    "compile:windows-x64":  "bun build --compile --target=bun-windows-x64 --outfile=build/windows-x64/shift.exe src/main.ts",
+    "compile:linux-x64":    "bun build --compile --target=bun-linux-x64    --outfile=build/linux-x64/rove     src/main.ts",
+    "compile:darwin-x64":   "bun build --compile --target=bun-darwin-x64   --outfile=build/darwin-x64/rove    src/main.ts",
+    "compile:darwin-arm64": "bun build --compile --target=bun-darwin-arm64 --outfile=build/darwin-arm64/rove  src/main.ts",
+    "compile:windows-x64":  "bun build --compile --target=bun-windows-x64 --outfile=build/windows-x64/rove.exe src/main.ts",
     "compile": "bun run compile:linux-x64 && bun run compile:darwin-x64 && bun run compile:darwin-arm64 && bun run compile:windows-x64",
     "dev":     "bun dev src/main.ts",
     "test":    "bun test",

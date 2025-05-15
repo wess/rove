@@ -18,7 +18,7 @@ import dumpCmd     from "./commands/dump";
 import loadCmd     from "./commands/load";
 
 const cli = new Command()
-  .name("shift")
+  .name("rove")
   .description("PostgreSQL migrations tool")
   .version("0.1.0");
 
