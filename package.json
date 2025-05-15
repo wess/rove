@@ -1,0 +1,33 @@
+{
+  "name": "shift",
+  "version": "0.0.1",
+  "description": "PostgreSQL migrations tool built with Bun and TypeScript",
+  "module": "src/main.ts",
+  "type": "module",
+  "bin": {
+    "shift": "./src/main.ts"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "compile:linux-x64":    "bun build --compile --target=bun-linux-x64    --outfile=build/linux-x64/shift     src/main.ts",
+    "compile:darwin-x64":   "bun build --compile --target=bun-darwin-x64   --outfile=build/darwin-x64/shift    src/main.ts",
+    "compile:darwin-arm64": "bun build --compile --target=bun-darwin-arm64 --outfile=build/darwin-arm64/shift  src/main.ts",
+    "compile:windows-x64":  "bun build --compile --target=bun-windows-x64 --outfile=build/windows-x64/shift.exe src/main.ts",
+    "compile": "bun run compile:linux-x64 && bun run compile:darwin-x64 && bun run compile:darwin-arm64 && bun run compile:windows-x64",
+    "dev":     "bun dev src/main.ts",
+    "test":    "bun test",
+    "release": "bun run compile && bun publish --access public"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "commander": "^13.1.0"
+  }
+}
