@@ -87,10 +87,10 @@ bun add -D shift
 ```
 project-root/
 ├─ migrations/
-│  ├─ 20250515\_add\_users\_table/
+│  ├─ 20250515\_add_users_table/
 │  │  ├─ up.sql   # applies changes
 │  │  └─ down.sql # reverts changes
-│  └─ 20250601\_add\_orders\_table/
+│  └─ 20250601\_add_orders_table/
 │     ├─ up.sql
 │     └─ down.sql
 
