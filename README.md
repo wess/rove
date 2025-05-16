@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="assets/logo.png" alt="logo" width="64" height="64" />
+</p>
+
 # Rove
 
-**A nice little migration too for Postgresql.*
+**A nice little migration tool for Postgresql.*
 
 Rove provides a fast CLI for managing your Postgres schema:
 
@@ -12,6 +16,11 @@ Rove provides a fast CLI for managing your Postgres schema:
 ---
 
 ## 📦 Installation
+
+```bash
+# Using Homebrew
+brew install wess/packages/rove
+```
 
 ```bash
 # Install globally via Bun
