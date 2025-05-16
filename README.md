@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="logo" width="64" height="64" />
+  <img src="assets/rove.png" alt="logo" width="128" height="128" />
 </p>
 
 # Rove
