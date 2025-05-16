@@ -9,7 +9,6 @@
 Rove provides a fast CLI for managing your Postgres schema:
 
 * Organize migrations in timestamped folders with `up.sql` / `down.sql`
-* Built on Bun’s native `sql` client—no external `pg` or `pg_dump` required
 * Create / drop databases, run migrations, rollbacks, status checks, schema dumps & loads
 * Cross‑platform support with native builds for Linux, macOS (Intel & ARM), and Windows
 
