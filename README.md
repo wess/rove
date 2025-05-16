@@ -95,10 +95,10 @@ bun add -D rove
 ```
 project-root/
 ├─ migrations/
-│  ├─ 20250515\_add_users_table/
+│  ├─ 20250515_add_users_table/
 │  │  ├─ up.sql   # applies changes
 │  │  └─ down.sql # reverts changes
-│  └─ 20250601\_add_orders_table/
+│  └─ 20250601_add_orders_table/
 │     ├─ up.sql
 │     └─ down.sql
 
