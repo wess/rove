@@ -109,7 +109,7 @@ project-root/
 ## 🛠️ Configuration
 
 - **DATABASE_URL** (or **POSTGRES_URL**) environment variable must point to your Postgres instance:
-  ```bash
+```bash
   export DATABASE_URL="postgres://user:pass@host:5432/db"
 ````
 
