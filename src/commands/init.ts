@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 export default function init() {
   const migrationsDir = path.resolve("migrations");
@@ -12,5 +12,5 @@ export default function init() {
   }
 
   console.log("\n⚠️  Be sure to set your DATABASE_URL before running migrations:");
-  console.log("   export DATABASE_URL=\"postgres://user:pass@localhost:5432/db\"\n");
+  console.log('   export DATABASE_URL="postgres://user:pass@localhost:5432/db"\n');
 }

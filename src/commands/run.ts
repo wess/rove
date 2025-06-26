@@ -33,8 +33,8 @@ export default async function runQuery(query: string): Promise<void> {
     client.release();
 
     // Ensure query ends with semicolon
-    const formattedQuery = query.trim().endsWith(';') ? query : `${query};`;
-    
+    const formattedQuery = query.trim().endsWith(";") ? query : `${query};`;
+
     // Execute the query
     console.log(`Executing: ${formattedQuery}`);
     const startTime = Date.now();
@@ -49,10 +49,14 @@ export default async function runQuery(query: string): Promise<void> {
       } else {
         console.log("(0 rows)");
       }
-      console.log(`(${result.rows.length} ${result.rows.length === 1 ? "row" : "rows"}, ${duration}ms)`);
+      console.log(
+        `(${result.rows.length} ${result.rows.length === 1 ? "row" : "rows"}, ${duration}ms)`,
+      );
     } else {
       // For non-SELECT queries, show affected row count
-      console.log(`${result.command} completed: ${result.rowCount} ${result.rowCount === 1 ? "row" : "rows"} affected (${duration}ms)`);
+      console.log(
+        `${result.command} completed: ${result.rowCount} ${result.rowCount === 1 ? "row" : "rows"} affected (${duration}ms)`,
+      );
     }
   } catch (err: any) {
     console.error("❌ Error executing query:", err.message || err);

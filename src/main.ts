@@ -2,27 +2,24 @@
 
 import { Command } from "commander";
 
+import downCmd from "./commands/down";
 // Migration commands
-import initCmd     from "./commands/init";
-import newCmd      from "./commands/new";
-import upCmd       from "./commands/up";
-import downCmd     from "./commands/down";
-import statusCmd   from "./commands/status";
+import initCmd from "./commands/init";
+import newCmd from "./commands/new";
+import statusCmd from "./commands/status";
+import upCmd from "./commands/up";
 
+import connectCmd from "./commands/connect";
 // Database management commands
 import createDbCmd from "./commands/create";
-import dropDbCmd   from "./commands/drop";
-import connectCmd  from "./commands/connect";
-import runCmd      from "./commands/run";
+import dropDbCmd from "./commands/drop";
+import runCmd from "./commands/run";
 
 // Schema dump/load
-import dumpCmd     from "./commands/dump";
-import loadCmd     from "./commands/load";
+import dumpCmd from "./commands/dump";
+import loadCmd from "./commands/load";
 
-const cli = new Command()
-  .name("rove")
-  .description("PostgreSQL migrations tool")
-  .version("0.0.4");
+const cli = new Command().name("rove").description("PostgreSQL migrations tool").version("0.0.4");
 
 // show help (alias for --help)
 cli
@@ -31,52 +28,28 @@ cli
   .action(() => cli.help());
 
 // generate a new migration directory
-cli
-  .command("new <name>")
-  .description("Generate a new migration")
-  .action(newCmd);
+cli.command("new <name>").description("Generate a new migration").action(newCmd);
 
 // initialize migrations folder
-cli
-  .command("init")
-  .description("Initialize migrations folder")
-  .action(initCmd);
+cli.command("init").description("Initialize migrations folder").action(initCmd);
 
 // create the database
-cli
-  .command("create")
-  .description("Create the database")
-  .action(createDbCmd);
+cli.command("create").description("Create the database").action(createDbCmd);
 
 // drop the database
-cli
-  .command("drop")
-  .description("Drop the database")
-  .action(dropDbCmd);
+cli.command("drop").description("Drop the database").action(dropDbCmd);
 
 // apply pending migrations (creating DB if needed)
-cli
-  .command("up")
-  .description("Create DB if needed and run pending migrations")
-  .action(upCmd);
+cli.command("up").description("Create DB if needed and run pending migrations").action(upCmd);
 
 // alias for up
-cli
-  .command("migrate")
-  .description("Run any pending migrations")
-  .action(upCmd);
+cli.command("migrate").description("Run any pending migrations").action(upCmd);
 
 // revert the last migration
-cli
-  .command("rollback")
-  .description("Roll back the most recent migration")
-  .action(downCmd);
+cli.command("rollback").description("Roll back the most recent migration").action(downCmd);
 
 // alias for rollback
-cli
-  .command("down")
-  .description("Alias for rollback")
-  .action(downCmd);
+cli.command("down").description("Alias for rollback").action(downCmd);
 
 // show migration status
 cli

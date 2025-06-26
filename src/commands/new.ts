@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 export default function create(name: string) {
   const migrationsDir = path.resolve("migrations");
@@ -17,16 +17,10 @@ export default function create(name: string) {
 
   // 3) Create the migration directory
   fs.mkdirSync(migrationPath);
-  
+
   // 4) Scaffold up.sql and down.sql
-  fs.writeFileSync(
-    path.join(migrationPath, "up.sql"),
-    "-- Write your UP migration SQL here\n"
-  );
-  fs.writeFileSync(
-    path.join(migrationPath, "down.sql"),
-    "-- Write your DOWN migration SQL here\n"
-  );
+  fs.writeFileSync(path.join(migrationPath, "up.sql"), "-- Write your UP migration SQL here\n");
+  fs.writeFileSync(path.join(migrationPath, "down.sql"), "-- Write your DOWN migration SQL here\n");
 
   console.log(`✔ Created migration ${dirName}`);
 }

@@ -1,6 +1,6 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { Pool } from "pg";
-import { promises as fs } from "fs";
-import path from "path";
 
 interface StatusOptions {
   exitCode?: boolean;
@@ -24,7 +24,9 @@ export default async function status(opts: StatusOptions = {}): Promise<void> {
   const migrationsDir = path.resolve(process.cwd(), "migrations");
   try {
     const stat = await fs.stat(migrationsDir);
-    if (!stat.isDirectory()) throw new Error();
+    if (!stat.isDirectory()) {
+      throw new Error();
+    }
   } catch {
     console.log("No migrations directory found. Run `shift init` first.");
     process.exit(1);
@@ -42,21 +44,19 @@ export default async function status(opts: StatusOptions = {}): Promise<void> {
     }>(
       `SELECT name, run_on
          FROM migrations
-     ORDER BY run_on ASC`
+     ORDER BY run_on ASC`,
     );
-    const appliedMap = new Map<string, Date>(
-      appliedRows.map(r => [r.name, r.run_on])
-    );
+    const appliedMap = new Map<string, Date>(appliedRows.map((r) => [r.name, r.run_on]));
 
     // 5) Discover all migration folders
     const entries = await fs.readdir(migrationsDir, { withFileTypes: true });
     const allMigs = entries
-      .filter(e => e.isDirectory())
-      .map(e => e.name)
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
       .sort((a, b) => a.localeCompare(b));
 
-    const pending = allMigs.filter(name => !appliedMap.has(name));
-    const applied = allMigs.filter(name => appliedMap.has(name));
+    const pending = allMigs.filter((name) => !appliedMap.has(name));
+    const applied = allMigs.filter((name) => appliedMap.has(name));
 
     // 6) Print status
     if (opts.quiet) {
@@ -65,9 +65,7 @@ export default async function status(opts: StatusOptions = {}): Promise<void> {
       console.log("Migration status:");
       for (const name of allMigs) {
         if (appliedMap.has(name)) {
-          console.log(
-            `  [X] ${name} — applied at ${appliedMap.get(name)!.toISOString()}`
-          );
+          console.log(`  [X] ${name} — applied at ${appliedMap.get(name)?.toISOString()}`);
         } else {
           console.log(`  [ ] ${name}`);
         }

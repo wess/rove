@@ -1,6 +1,6 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { Pool } from "pg";
-import { promises as fs } from "fs";
-import path from "path";
 
 export default async function up(): Promise<void> {
   // 1) Grab DATABASE_URL (or POSTGRES_URL) from env
@@ -29,9 +29,9 @@ export default async function up(): Promise<void> {
 
     // 5) Load already-applied migrations
     const { rows: appliedRows } = await client.query<{ name: string }>(
-      `SELECT name FROM migrations`
+      "SELECT name FROM migrations",
     );
-    const applied = new Set(appliedRows.map(r => r.name));
+    const applied = new Set(appliedRows.map((r) => r.name));
 
     // 6) Discover all migration folders
     const migrationsDir = path.resolve(process.cwd(), "migrations");
@@ -39,8 +39,8 @@ export default async function up(): Promise<void> {
     try {
       const entries = await fs.readdir(migrationsDir, { withFileTypes: true });
       allMigs = entries
-        .filter(e => e.isDirectory())
-        .map(e => e.name)
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name)
         .sort((a, b) => a.localeCompare(b));
     } catch {
       console.error(`⚠️  Migrations directory not found at ${migrationsDir}`);
@@ -49,7 +49,9 @@ export default async function up(): Promise<void> {
 
     // 7) Apply each pending migration
     for (const name of allMigs) {
-      if (applied.has(name)) continue;
+      if (applied.has(name)) {
+        continue;
+      }
 
       const upPath = path.join(migrationsDir, name, "up.sql");
       let script: string;
@@ -62,7 +64,7 @@ export default async function up(): Promise<void> {
 
       console.log(`→ Applying "${name}"…`);
       await client.query(script);
-      await client.query(`INSERT INTO migrations (name) VALUES ($1)`, [name]);
+      await client.query("INSERT INTO migrations (name) VALUES ($1)", [name]);
       console.log(`✔ "${name}" applied.`);
     }
 

@@ -1,5 +1,5 @@
+import * as readline from "node:readline";
 import { Pool } from "pg";
-import * as readline from "readline";
 
 export default async function connectDb(): Promise<void> {
   // 1) Grab DATABASE_URL (or POSTGRES_URL) from env
@@ -74,16 +74,16 @@ export default async function connectDb(): Promise<void> {
             table_schema, table_name;
         `;
         const result = await pool.query(query);
-        
+
         if (result.rows.length === 0) {
           console.log("No tables found.");
         } else {
           console.log("Tables");
           console.log("Schema | Name | Type");
           console.log("-------|------|------");
-          result.rows.forEach(row => {
+          for (const row of result.rows) {
             console.log(`${row.table_schema} | ${row.table_name} | ${row.table_type}`);
-          });
+          }
           console.log(`(${result.rows.length} ${result.rows.length === 1 ? "table" : "tables"})`);
         }
         return true;
@@ -108,16 +108,16 @@ export default async function connectDb(): Promise<void> {
             schema_name;
         `;
         const result = await pool.query(query);
-        
+
         if (result.rows.length === 0) {
           console.log("No schemas found.");
         } else {
           console.log("Schemas");
           console.log("Name | Owner");
           console.log("-----|------");
-          result.rows.forEach(row => {
+          for (const row of result.rows) {
             console.log(`${row.schema_name} | ${row.schema_owner}`);
-          });
+          }
           console.log(`(${result.rows.length} ${result.rows.length === 1 ? "schema" : "schemas"})`);
         }
         return true;
@@ -128,7 +128,11 @@ export default async function connectDb(): Promise<void> {
     }
 
     // Describe table
-    if (command.startsWith("\\d ") || command.startsWith("/describe ") || command.startsWith("/desc ")) {
+    if (
+      command.startsWith("\\d ") ||
+      command.startsWith("/describe ") ||
+      command.startsWith("/desc ")
+    ) {
       // Extract table name based on command format
       let tableName = "";
       if (command.startsWith("\\d ")) {
@@ -154,16 +158,18 @@ export default async function connectDb(): Promise<void> {
             ordinal_position;
         `;
         const result = await pool.query(query, [tableName]);
-        
+
         if (result.rows.length === 0) {
           console.log(`Table "${tableName}" does not exist.`);
         } else {
           console.log(`Table "${tableName}"`);
           console.log("Column | Type | Nullable | Default");
           console.log("-------|------|----------|--------");
-          result.rows.forEach(row => {
-            console.log(`${row.column_name} | ${row.data_type} | ${row.is_nullable} | ${row.column_default || ''}`);
-          });
+          for (const row of result.rows) {
+            console.log(
+              `${row.column_name} | ${row.data_type} | ${row.is_nullable} | ${row.column_default || ""}`,
+            );
+          }
           console.log(`(${result.rows.length} ${result.rows.length === 1 ? "column" : "columns"})`);
         }
         return true;
@@ -189,14 +195,16 @@ export default async function connectDb(): Promise<void> {
             datname;
         `;
         const result = await pool.query(query);
-        
+
         console.log("Databases");
         console.log("Name | Owner | Size");
         console.log("-----|-------|-----");
-        result.rows.forEach(row => {
+        for (const row of result.rows) {
           console.log(`${row.name} | ${row.owner} | ${row.size}`);
-        });
-        console.log(`(${result.rows.length} ${result.rows.length === 1 ? "database" : "databases"})`);
+        }
+        console.log(
+          `(${result.rows.length} ${result.rows.length === 1 ? "database" : "databases"})`,
+        );
         return true;
       } catch (err: any) {
         console.error("Error listing databases:", err.message || err);
@@ -240,16 +248,20 @@ export default async function connectDb(): Promise<void> {
 
   rl.on("line", async (line) => {
     const trimmedLine = line.trim();
-    
+
     // Handle exit commands
-    if (trimmedLine === "\\q" || trimmedLine === "\\quit" || 
-        trimmedLine === "/exit" || trimmedLine === "/quit") {
+    if (
+      trimmedLine === "\\q" ||
+      trimmedLine === "\\quit" ||
+      trimmedLine === "/exit" ||
+      trimmedLine === "/quit"
+    ) {
       console.log("Closing connection...");
       await pool.end();
       rl.close();
       return;
     }
-    
+
     // Handle clear buffer command
     if (trimmedLine === "\\c" || trimmedLine === "/clear") {
       if (buffer.length > 0) {
@@ -270,7 +282,7 @@ export default async function connectDb(): Promise<void> {
     }
 
     // Add the line to the buffer
-    buffer += line + " ";
+    buffer += `${line} `;
 
     // Check if the query is complete (ends with semicolon)
     if (buffer.trim().endsWith(";")) {
@@ -298,10 +310,14 @@ export default async function connectDb(): Promise<void> {
           } else {
             console.log("(0 rows)");
           }
-          console.log(`(${result.rows.length} ${result.rows.length === 1 ? "row" : "rows"}, ${duration}ms)`);
+          console.log(
+            `(${result.rows.length} ${result.rows.length === 1 ? "row" : "rows"}, ${duration}ms)`,
+          );
         } else {
           // For non-SELECT queries, show affected row count
-          console.log(`${result.command} completed: ${result.rowCount} ${result.rowCount === 1 ? "row" : "rows"} affected (${duration}ms)`);
+          console.log(
+            `${result.command} completed: ${result.rowCount} ${result.rowCount === 1 ? "row" : "rows"} affected (${duration}ms)`,
+          );
         }
       } catch (err: any) {
         console.error("Error executing query:", err.message || err);

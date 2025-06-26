@@ -1,6 +1,6 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { Pool } from "pg";
-import { promises as fs } from "fs";
-import path from "path";
 
 export default async function down(): Promise<void> {
   // 1) Grab DATABASE_URL (or POSTGRES_URL) from env
@@ -20,7 +20,7 @@ export default async function down(): Promise<void> {
       `SELECT name
          FROM migrations
         ORDER BY run_on DESC
-         LIMIT 1`
+         LIMIT 1`,
     );
     if (rows.length === 0) {
       console.log("✔ No migrations to revert.");
@@ -46,10 +46,7 @@ export default async function down(): Promise<void> {
       console.log(`✔ Reverted "${lastName}".`);
     }
 
-    await client.query(
-      `DELETE FROM migrations WHERE name = $1`,
-      [lastName]
-    );
+    await client.query("DELETE FROM migrations WHERE name = $1", [lastName]);
     console.log(`✔ Removed record for "${lastName}".`);
 
     await client.query("COMMIT");

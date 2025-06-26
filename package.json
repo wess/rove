@@ -19,9 +19,12 @@
     "compile": "bun run compile:linux-x64 && bun run compile:darwin-x64 && bun run compile:darwin-arm64 && bun run compile:windows-x64",
     "dev": "bun dev src/main.ts",
     "test": "bun test",
-    "release": "bun run compile && bun publish --access public"
+    "release": "bun run compile && bun publish --access public",
+    "lint": "biome lint --fix src/**/*.ts",
+    "format": "biome format --fix src/**/*.ts"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.0.5",
     "@types/bun": "latest"
   },
   "peerDependencies": {

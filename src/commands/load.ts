@@ -1,12 +1,12 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { Pool } from "pg";
-import { promises as fs } from "fs";
-import path from "path";
 
 /**
  * Load a SQL schema file into the current database.
  * @param inputFile - Optional. The filename to load (defaults to "schema.sql").
  */
-export default async function load(inputFile: string = "schema.sql"): Promise<void> {
+export default async function load(inputFile = "schema.sql"): Promise<void> {
   // 1) Grab DATABASE_URL (or POSTGRES_URL) from env
   const envUrl = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
   if (!envUrl) {
@@ -45,7 +45,10 @@ export default async function load(inputFile: string = "schema.sql"): Promise<vo
     await client.query("BEGIN");
 
     // 4) Split on semicolons and run each statement
-    const statements = sqlContent.split(";").map(s => s.trim()).filter(Boolean);
+    const statements = sqlContent
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean);
     for (const stmt of statements) {
       await client.query(stmt);
     }
