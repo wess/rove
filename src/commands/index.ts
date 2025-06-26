@@ -1,4 +1,5 @@
 export {default as Create} from './create';
+export {default as Connect} from './connect';
 export {default as Down} from "./down";
 export {default as Init} from './init';
 export {default as Status} from './status';

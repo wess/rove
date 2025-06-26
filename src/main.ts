@@ -12,6 +12,7 @@ import statusCmd   from "./commands/status";
 // Database management commands
 import createDbCmd from "./commands/create";
 import dropDbCmd   from "./commands/drop";
+import connectCmd  from "./commands/connect";
 
 // Schema dump/load
 import dumpCmd     from "./commands/dump";
@@ -20,7 +21,7 @@ import loadCmd     from "./commands/load";
 const cli = new Command()
   .name("rove")
   .description("PostgreSQL migrations tool")
-  .version("0.1.0");
+  .version("0.0.3");
 
 // show help (alias for --help)
 cli
@@ -95,5 +96,11 @@ cli
   .command("load [file]")
   .description("Load a SQL schema file into the database (default: schema.sql)")
   .action((file: string) => loadCmd(file));
+
+// connect to database with SQL REPL
+cli
+  .command("connect")
+  .description("Connect to the database with an interactive SQL REPL")
+  .action(connectCmd);
 
 cli.parse(process.argv);
