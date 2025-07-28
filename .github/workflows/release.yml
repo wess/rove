@@ -30,6 +30,13 @@ jobs:
       - name: Compile all platforms
         run: bun run compile
 
+      - name: Fix file permissions
+        run: |
+          chmod +r build/linux-x64/rove
+          chmod +r build/darwin-x64/rove
+          chmod +r build/darwin-arm64/rove
+          chmod +r build/windows-x64/rove.exe
+
       - name: Read version
         id: get_version
         run: |
