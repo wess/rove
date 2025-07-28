@@ -5,3 +5,4 @@ export { default as Run } from "./run";
 export { default as Init } from "./init";
 export { default as Status } from "./status";
 export { default as Up } from "./up";
+export { default as Seed } from "./seed";

@@ -1,0 +1,22 @@
+[test]
+# Test configuration for Rove
+preload = ["./tests/setup.ts"]
+timeout = 30000
+
+# Test file patterns
+testNamePattern = ".*\\.test\\.(ts|js)$"
+
+# Coverage settings
+coverage = true
+coverageDir = "./coverage"
+
+# Test environment
+env = { NODE_ENV = "test" }
+
+# Exclude patterns
+exclude = [
+  "node_modules/**",
+  "build/**",
+  "coverage/**",
+  "*.config.*"
+]

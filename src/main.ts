@@ -19,7 +19,13 @@ import runCmd from "./commands/run";
 import dumpCmd from "./commands/dump";
 import loadCmd from "./commands/load";
 
-const cli = new Command().name("rove").description("PostgreSQL migrations tool").version("0.0.4");
+// MCP server
+import mcpCmd from "./commands/mcp";
+
+// Seed command
+import seedCmd from "./commands/seed";
+
+const cli = new Command().name("rove").description("PostgreSQL migrations tool").version("0.0.5");
 
 // show help (alias for --help)
 cli
@@ -79,8 +85,27 @@ cli
 
 // execute a SQL query and pretty print the results
 cli
-  .command("run <query>")
+  .command("run [query]")
   .description("Execute a SQL query and pretty print the results")
-  .action(runCmd);
+  .option("--show-tables", "Show all tables in the database")
+  .option("--query <sql>", "SQL query to execute")
+  .action((query, options) => runCmd(query, options));
+
+// start MCP server
+cli
+  .command("mcp")
+  .description("Start Model Context Protocol server for database access")
+  .option("--port <port>", "HTTP port to run on (default: stdio transport)", parseInt)
+  .option("--host <host>", "Host to bind to (default: localhost)", "localhost")
+  .action(mcpCmd);
+
+// seed database with sample data
+cli
+  .command("seed")
+  .description("Fill database tables with generated sample data")
+  .option("--count <count>", "Number of records to generate per table (default: 10)", parseInt, 10)
+  .option("--truncate", "Truncate tables before seeding (default: false)")
+  .option("--verbose", "Show detailed information about data generation")
+  .action(seedCmd);
 
 cli.parse(process.argv);

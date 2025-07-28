@@ -1,6 +1,11 @@
 import { Pool } from "pg";
 
-export default async function runQuery(query: string): Promise<void> {
+interface RunOptions {
+  showTables?: boolean;
+  query?: string;
+}
+
+export default async function runQuery(query?: string, options: RunOptions = {}): Promise<void> {
   // 1) Grab DATABASE_URL (or POSTGRES_URL) from env
   const envUrl = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
   if (!envUrl) {
@@ -32,8 +37,36 @@ export default async function runQuery(query: string): Promise<void> {
     console.log(`✔ Connected to database "${dbName}"`);
     client.release();
 
+    // Determine what query to execute
+    let queryToExecute: string;
+
+    if (options.showTables) {
+      // Show tables query
+      queryToExecute = `
+        SELECT 
+          table_name,
+          table_type
+        FROM information_schema.tables 
+        WHERE table_schema = 'public'
+        ORDER BY table_name;
+      `;
+    } else if (options.query) {
+      // Use query from --query flag
+      queryToExecute = options.query;
+    } else if (query) {
+      // Use positional query argument (backward compatibility)
+      queryToExecute = query;
+    } else {
+      console.error(
+        "❌ No query specified. Use a positional argument, --query flag, or --show-tables flag.",
+      );
+      process.exit(1);
+    }
+
     // Ensure query ends with semicolon
-    const formattedQuery = query.trim().endsWith(";") ? query : `${query};`;
+    const formattedQuery = queryToExecute.trim().endsWith(";")
+      ? queryToExecute
+      : `${queryToExecute};`;
 
     // Execute the query
     console.log(`Executing: ${formattedQuery}`);

@@ -1,6 +1,6 @@
 {
   "name": "rove",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "PostgreSQL migrations tool built with Bun and TypeScript",
   "module": "src/main.ts",
   "type": "module",
@@ -19,6 +19,11 @@
     "compile": "bun run compile:linux-x64 && bun run compile:darwin-x64 && bun run compile:darwin-arm64 && bun run compile:windows-x64",
     "dev": "bun dev src/main.ts",
     "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "test:commands": "bun test tests/commands/",
+    "test:integration": "bun test tests/integration.test.ts",
+    "test:summary": "bun run scripts/test-summary.ts",
     "release": "bun run compile && bun publish --access public",
     "lint": "biome lint --fix src/**/*.ts",
     "format": "biome format --fix src/**/*.ts"
@@ -31,6 +36,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.16.0",
     "@types/pg": "^8.15.4",
     "commander": "^13.1.0",
     "pg": "^8.16.2"
