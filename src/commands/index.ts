@@ -1,8 +1,14 @@
 export { default as Create } from "./create";
 export { default as Connect } from "./connect";
 export { default as Down } from "./down";
-export { default as Run } from "./run";
+export { default as Drop } from "./drop";
+export { default as Dump } from "./dump";
 export { default as Init } from "./init";
-export { default as Status } from "./status";
-export { default as Up } from "./up";
+export { default as Load } from "./load";
+export { default as Mcp } from "./mcp";
+export { default as New } from "./new";
+export { default as Run } from "./run";
 export { default as Seed } from "./seed";
+export { default as Status } from "./status";
+export { default as Table } from "./table";
+export { default as Up } from "./up";

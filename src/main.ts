@@ -25,6 +25,9 @@ import mcpCmd from "./commands/mcp";
 // Seed command
 import seedCmd from "./commands/seed";
 
+// Table command
+import tableCmd from "./commands/table";
+
 const cli = new Command().name("rove").description("PostgreSQL migrations tool").version("0.0.5");
 
 // show help (alias for --help)
@@ -107,5 +110,11 @@ cli
   .option("--truncate", "Truncate tables before seeding (default: false)")
   .option("--verbose", "Show detailed information about data generation")
   .action(seedCmd);
+
+// table inspection
+cli
+  .command("table [name]")
+  .description("List tables or describe a specific table (use 'list' or omit name to list all)")
+  .action(tableCmd);
 
 cli.parse(process.argv);

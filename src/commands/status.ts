@@ -28,7 +28,7 @@ export default async function status(opts: StatusOptions = {}): Promise<void> {
       throw new Error();
     }
   } catch {
-    console.log("No migrations directory found. Run `shift init` first.");
+    console.log("No migrations directory found. Run `rove init` first.");
     process.exit(1);
   }
 
