@@ -75,3 +75,87 @@ jobs:
             rove-${{ steps.get_version.outputs.version }}-windows-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-homebrew:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for VERSION)
+        uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: v
+        run: echo "version=$(<VERSION)" >> "$GITHUB_OUTPUT"
+
+      - name: Download release tarballs and compute SHAs
+        id: shas
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${{ steps.v.outputs.version }}"
+          gh release download "v${V}" --repo "${{ github.repository }}" \
+            --pattern "rove-${V}-darwin-arm64.tar.gz" \
+            --pattern "rove-${V}-darwin-x64.tar.gz" \
+            --pattern "rove-${V}-linux-x64.tar.gz" --dir t
+          {
+            echo "sha_darwin_arm64=$(sha256sum t/rove-${V}-darwin-arm64.tar.gz | cut -d' ' -f1)"
+            echo "sha_darwin_x64=$(sha256sum t/rove-${V}-darwin-x64.tar.gz | cut -d' ' -f1)"
+            echo "sha_linux_x64=$(sha256sum t/rove-${V}-linux-x64.tar.gz | cut -d' ' -f1)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Checkout homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: wess/homebrew-packages
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: tap
+
+      - name: Update formula
+        env:
+          REPO: ${{ github.repository }}
+          VERSION: ${{ steps.v.outputs.version }}
+          SHA_DARWIN_ARM64: ${{ steps.shas.outputs.sha_darwin_arm64 }}
+          SHA_DARWIN_X64: ${{ steps.shas.outputs.sha_darwin_x64 }}
+          SHA_LINUX_X64: ${{ steps.shas.outputs.sha_linux_x64 }}
+        run: |
+          cat > tap/Formula/rove.rb << RUBY
+          class Rove < Formula
+            desc "PostgreSQL migrations tool built with Bun and TypeScript"
+            homepage "https://github.com/${REPO}"
+            version "${VERSION}"
+
+            if OS.mac?
+              if Hardware::CPU.intel?
+                url "https://github.com/${REPO}/releases/download/v#{version}/rove-#{version}-darwin-x64.tar.gz"
+                sha256 "${SHA_DARWIN_X64}"
+              else # ARM
+                url "https://github.com/${REPO}/releases/download/v#{version}/rove-#{version}-darwin-arm64.tar.gz"
+                sha256 "${SHA_DARWIN_ARM64}"
+              end
+            elsif OS.linux?
+              url "https://github.com/${REPO}/releases/download/v#{version}/rove-#{version}-linux-x64.tar.gz"
+              sha256 "${SHA_LINUX_X64}"
+            end
+
+            def install
+              bin.install "rove"
+            end
+
+            test do
+              assert_match "PostgreSQL migrations tool", shell_output("#{bin}/rove --help")
+            end
+          end
+          RUBY
+
+      - name: Push updated formula
+        run: |
+          cd tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/rove.rb
+          if git diff --cached --quiet; then
+            echo "Formula already up to date"
+          else
+            git commit -m "Update rove to v${{ steps.v.outputs.version }}"
+            git push
+          fi
