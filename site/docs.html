@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Documentation — Rove</title>
+    <meta name="description" content="Documentation for Rove: installation, getting started, the CLI command reference, migrations structure, configuration, and the source on GitHub." />
+    <link rel="stylesheet" href="styles.css" />
+    <style>:root{--accent:#37b6a0;--accent2:#2b7fb8}</style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="wrap">
+        <a class="brand" href="index.html"><span class="mark">⇄</span> Rove</a>
+        <button class="navtoggle" aria-label="Menu" data-nav>☰</button>
+        <div class="navlinks" data-navlinks>
+          <a href="index.html#features">Features</a>
+          <a href="index.html#commands">Commands</a>
+          <a href="docs.html">Docs</a>
+          <a class="btn primary" href="https://github.com/wess/rove">GitHub</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="dochero">
+      <div class="wrap">
+        <div class="eyebrow">Documentation</div>
+        <h2 style="font-size: clamp(28px, 5vw, 40px); font-weight: 800; letter-spacing: -0.02em">Everything about Rove.</h2>
+        <p class="sub">
+          Rove is a small CLI, so the full reference lives in the project <code>README</code> on GitHub. Start with
+          installation and getting started, then keep the command reference handy. Each card links straight to the source.
+        </p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="docsection">Get going</div>
+      <div class="docgrid">
+        <a class="doccard" href="../README.md">
+          <div class="t"><span class="ico">📖</span> Readme</div>
+          <p>The complete guide: what Rove is, installation, and usage in one place.</p>
+        </a>
+        <a class="doccard" href="../README.md#-installation">
+          <div class="t"><span class="ico">📦</span> Installation</div>
+          <p>Install with Homebrew, globally via Bun, or as a local dev dependency.</p>
+        </a>
+        <a class="doccard" href="../README.md#-getting-started">
+          <div class="t"><span class="ico">🚀</span> Getting started</div>
+          <p>Initialize, generate a migration, run it, roll it back, and check status.</p>
+        </a>
+      </div>
+
+      <div class="docsection">Reference</div>
+      <div class="docgrid">
+        <a class="doccard" href="../README.md#%EF%B8%8F-cli-commands">
+          <div class="t"><span class="ico">⌨️</span> CLI commands</div>
+          <p>Every command — init, new, create, drop, up, rollback, status, dump, load.</p>
+        </a>
+        <a class="doccard" href="../README.md#-migrations-structure">
+          <div class="t"><span class="ico">📁</span> Migrations structure</div>
+          <p>How timestamped folders and up.sql / down.sql files are laid out.</p>
+        </a>
+        <a class="doccard" href="../README.md#%EF%B8%8F-configuration">
+          <div class="t"><span class="ico">⚙️</span> Configuration</div>
+          <p>DATABASE_URL / POSTGRES_URL and PG_DOCKER_CONTAINER for Docker setups.</p>
+        </a>
+      </div>
+
+      <div class="docsection">Source &amp; project</div>
+      <div class="docgrid">
+        <a class="doccard" href="https://github.com/wess/rove">
+          <div class="t"><span class="ico">🔗</span> Source</div>
+          <p>Browse the TypeScript source, builds, and tests on GitHub.</p>
+        </a>
+        <a class="doccard" href="https://github.com/wess/rove/issues">
+          <div class="t"><span class="ico">🐛</span> Issues</div>
+          <p>Report a bug or request a feature in the issue tracker.</p>
+        </a>
+        <a class="doccard" href="https://github.com/wess/rove/blob/main/LICENSE">
+          <div class="t"><span class="ico">📄</span> License</div>
+          <p>Rove is open source under the MIT License.</p>
+        </a>
+      </div>
+    </main>
+
+    <footer style="margin-top: 60px">
+      <div class="wrap">
+        <a class="brand" href="index.html"><span class="mark">⇄</span> Rove</a>
+        <div class="links">
+          <a href="index.html">Home</a>
+          <a href="../README.md">Readme</a>
+          <a href="https://github.com/wess/rove">GitHub</a>
+          <a href="https://github.com/wess/rove/issues">Issues</a>
+        </div>
+        <span>MIT License · © 2026</span>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rove — a nice little migration tool for PostgreSQL</title>
+    <meta
+      name="description"
+      content="Rove is a fast CLI for managing your PostgreSQL schema: timestamped up/down migrations, create and drop databases, run and roll back changes, status checks, and schema dump/load. Built with Bun and TypeScript."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>:root{--accent:#37b6a0;--accent2:#2b7fb8}</style>
+  </head>
+  <body>
+    <!-- nav -->
+    <nav class="nav">
+      <div class="wrap">
+        <a class="brand" href="index.html"><span class="mark">⇄</span> Rove</a>
+        <button class="navtoggle" aria-label="Menu" data-nav>☰</button>
+        <div class="navlinks" data-navlinks>
+          <a href="#features">Features</a>
+          <a href="#commands">Commands</a>
+          <a href="docs.html">Docs</a>
+          <a class="btn primary" href="https://github.com/wess/rove">GitHub</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- hero -->
+    <header class="hero">
+      <div class="wrap">
+        <span class="pill"><span class="dot"></span> PostgreSQL · Bun · TypeScript · cross-platform</span>
+        <h1>A nice little migration tool for <span class="accent">PostgreSQL</span>.</h1>
+        <p class="lead">
+          Rove is a fast CLI for managing your Postgres schema. Organize migrations in timestamped folders with
+          <code>up.sql</code> / <code>down.sql</code>, create and drop databases, run migrations and rollbacks, check
+          status, and dump or load your schema.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#start">Get started</a>
+          <a class="btn ghost" href="https://github.com/wess/rove">View on GitHub →</a>
+        </div>
+
+        <!-- terminal mockup -->
+        <div class="mock">
+          <div class="bar">
+            <span class="hash">$</span><span>rove</span>
+            <span class="muted" style="font-size: 13px">· postgres migrations</span>
+            <span class="dots"><i></i><i></i><i></i></span>
+          </div>
+          <div class="body">
+            <div class="msg human">
+              <div class="av">⌨️</div>
+              <div>
+                <div class="who">you</div>
+                <div class="txt">rove new add_users_table</div>
+              </div>
+            </div>
+            <div class="msg">
+              <div class="av" style="background: linear-gradient(135deg, #37b6a0, #2b7fb8)">⇄</div>
+              <div>
+                <div class="who">rove <small>scaffold</small></div>
+                <div class="txt">created migrations/20250515_add_users_table/{up.sql, down.sql}</div>
+              </div>
+            </div>
+            <div class="msg human">
+              <div class="av">⌨️</div>
+              <div>
+                <div class="who">you</div>
+                <div class="txt">rove up</div>
+              </div>
+            </div>
+            <div class="msg">
+              <div class="av" style="background: linear-gradient(135deg, #37b6a0, #2b7fb8)">⇄</div>
+              <div>
+                <div class="who">rove <small>migrate</small></div>
+                <div class="txt">applied 1 migration · database now up to date ✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- features -->
+    <section class="block" id="features">
+      <div class="wrap">
+        <div class="eyebrow">Features</div>
+        <h2>Schema changes you can read, run, and reverse.</h2>
+        <p class="sub">Everything you need to evolve a Postgres database from the command line — and nothing you don't.</p>
+        <div class="grid">
+          <div class="card">
+            <div class="ico">📁</div>
+            <h3>Timestamped migrations</h3>
+            <p>Each change lives in its own dated folder with plain <code>up.sql</code> and <code>down.sql</code> files.</p>
+          </div>
+          <div class="card">
+            <div class="ico">⬆️</div>
+            <h3>Up &amp; down</h3>
+            <p>Run all pending migrations with <code>rove up</code>, or revert the most recent one with <code>rove down</code>.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🗄️</div>
+            <h3>Create &amp; drop</h3>
+            <p>Provision or tear down the database named in your <code>DATABASE_URL</code> in a single command.</p>
+          </div>
+          <div class="card">
+            <div class="ico">📊</div>
+            <h3>Status checks</h3>
+            <p>See applied versus pending migrations, with <code>--exit-code</code> and <code>--quiet</code> for CI.</p>
+          </div>
+          <div class="card">
+            <div class="ico">💾</div>
+            <h3>Dump &amp; load</h3>
+            <p>Snapshot the public schema to a SQL file, or load one back in — handy for fresh setups and backups.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🌍</div>
+            <h3>Cross-platform builds</h3>
+            <p>Native binaries for Linux, macOS (Intel &amp; ARM), and Windows — compiled straight from Bun.</p>
+          </div>
+          <div class="card">
+            <div class="ico">⚡</div>
+            <h3>Built on Bun</h3>
+            <p>Written in TypeScript and compiled with Bun for a fast, dependency-light single-file CLI.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🐳</div>
+            <h3>Docker friendly</h3>
+            <p>Point <code>PG_DOCKER_CONTAINER</code> at your container for schema dumps in Docker-only setups.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- commands -->
+    <section class="block" id="commands">
+      <div class="wrap">
+        <div class="eyebrow">CLI commands</div>
+        <h2>One verb per task.</h2>
+        <p class="sub">The full command surface — short, predictable, and scriptable.</p>
+        <div class="steps">
+          <div class="step">
+            <h4>rove init</h4>
+            <p>Create the top-level <code>migrations/</code> folder.</p>
+          </div>
+          <div class="step">
+            <h4>rove new &lt;name&gt;</h4>
+            <p>Scaffold a new migration directory with <code>up.sql</code> and <code>down.sql</code>.</p>
+          </div>
+          <div class="step">
+            <h4>rove create / drop</h4>
+            <p>Create or drop the database specified by <code>DATABASE_URL</code>.</p>
+          </div>
+          <div class="step">
+            <h4>rove up / migrate</h4>
+            <p>Create the DB if needed and run all pending <code>up.sql</code> scripts.</p>
+          </div>
+          <div class="step">
+            <h4>rove rollback / down</h4>
+            <p>Revert the most recent migration with its <code>down.sql</code> script.</p>
+          </div>
+          <div class="step">
+            <h4>rove status</h4>
+            <p>Show applied vs pending migrations — supports <code>--exit-code</code> and <code>--quiet</code>.</p>
+          </div>
+          <div class="step">
+            <h4>rove dump [file]</h4>
+            <p>Dump the public schema to a SQL file (default <code>schema.sql</code>).</p>
+          </div>
+          <div class="step">
+            <h4>rove load [file]</h4>
+            <p>Load a SQL schema file into the database (default <code>schema.sql</code>).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout / how it works -->
+    <section class="block" id="layout">
+      <div class="wrap">
+        <div class="eyebrow">Migrations structure</div>
+        <h2>Plain SQL, organized by time.</h2>
+        <div class="split">
+          <ul>
+            <li><span class="ck">✦</span><span><b>Timestamped folders</b> — every migration is its own dated directory, ordered naturally on disk.</span></li>
+            <li><span class="ck">✦</span><span><b>up.sql applies</b> the change; <b>down.sql reverts</b> it. No DSL — just the SQL you already know.</span></li>
+            <li><span class="ck">✦</span><span><b>DATABASE_URL</b> (or <code>POSTGRES_URL</code>) points Rove at your Postgres instance.</span></li>
+            <li><span class="ck">✦</span><span><b>Status in CI</b> — <code>rove status --exit-code</code> fails the build when migrations are pending.</span></li>
+          </ul>
+          <div class="diagram">project-root/
+└─ migrations/
+   ├─ 20250515_add_users_table/
+   │  ├─ up.sql    # applies changes
+   │  └─ down.sql  # reverts changes
+   └─ 20250601_add_orders_table/
+      ├─ up.sql
+      └─ down.sql</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- get started -->
+    <section class="block" id="start">
+      <div class="wrap">
+        <div class="eyebrow">Get started</div>
+        <h2>Up and running in a minute.</h2>
+        <p class="sub">Requires a PostgreSQL instance. Install with Homebrew or Bun, point <code>DATABASE_URL</code> at your database, and go.</p>
+        <div class="code" style="margin-top: 32px; max-width: 720px">
+          <div class="top">
+            <span>terminal</span>
+            <button class="copy" data-copy>Copy</button>
+          </div>
+          <pre data-code><span class="c"># 1. install (Homebrew)</span>
+brew install wess/packages/rove
+
+<span class="c"># …or as a local dev dependency</span>
+bun add -D rove
+
+<span class="c"># 2. point Rove at your database</span>
+export DATABASE_URL="postgres://user:pass@host:5432/db"
+
+<span class="c"># 3. initialize and create your first migration</span>
+rove init
+rove new add_users_table   <span class="c"># edit the up.sql / down.sql it scaffolds</span>
+
+<span class="c"># 4. run migrations and check status</span>
+rove up
+rove status</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- cta band -->
+    <section class="band">
+      <div class="wrap">
+        <h2>Migrate your Postgres schema with confidence.</h2>
+        <p>Open source under the MIT License. Grab a native binary or install with Bun and start shipping schema changes.</p>
+        <div class="cta">
+          <a class="btn primary" href="docs.html">Read the docs</a>
+          <a class="btn ghost" href="https://github.com/wess/rove">View on GitHub →</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <a class="brand" href="index.html"><span class="mark">⇄</span> Rove</a>
+        <div class="links">
+          <a href="docs.html">Docs</a>
+          <a href="index.html#start">Get started</a>
+          <a href="index.html#commands">Commands</a>
+          <a href="https://github.com/wess/rove">GitHub</a>
+        </div>
+        <span>MIT License · © 2026</span>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
