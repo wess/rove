@@ -29,7 +29,7 @@ bun install -g .
 Or as a local dev dependency:
 
 ```bash
-bun add -D rove
+bun add -D github:wess/rove
 ```
 
 ---
