@@ -128,3 +128,5 @@ project-root/
 ## 📄 License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
+
+♥ [Sponsor this project](https://github.com/sponsors/wess)
